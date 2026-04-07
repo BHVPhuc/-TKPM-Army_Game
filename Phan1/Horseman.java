@@ -4,13 +4,13 @@ public class Horseman implements Soldier {
 
     @Override
     public int hit() {
-        System.out.println("Horseman hit ->");
+        System.out.println("Horseman hit " + attack + " -> ");
         return attack;
     }
 
     @Override
     public boolean wardOff(int strength) {
-        System.out.println("Horseman wardOff ->");
+        System.out.println("Horseman wardOff " + strength + " -> ");
         health -= strength;
         if (health <= 0) {
             health = 0;

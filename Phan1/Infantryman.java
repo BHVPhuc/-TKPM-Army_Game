@@ -4,13 +4,13 @@ public class Infantryman implements Soldier {
 
     @Override
     public int hit() {
-        System.out.println("Infantryman hit ->");
+        System.out.print("Infantryman hit " + attack + " -> ");
         return attack;
     }
 
     @Override
     public boolean wardOff(int strength) {
-        System.out.println("Infantryman wardOff ->");
+        System.out.print("Infantryman wardOff " + strength + " -> ");
         health -= strength;
         if (health <= 0) {
             health = 0;
