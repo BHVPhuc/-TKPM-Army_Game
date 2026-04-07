@@ -5,11 +5,7 @@ public class SwordDecorator extends EquipmentDecorator {
 
     @Override
     public int hit() {
+        System.out.println("Sword hit +5 ->");
         return decoratedSoldier.hit() + 5;
-    }
-
-    @Override
-    public String getDescription() {
-        return decoratedSoldier.getDescription() + " with sword";
     }
 }

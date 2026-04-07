@@ -14,9 +14,4 @@ abstract class EquipmentDecorator implements Soldier {
     public boolean wardOff(int strength) {
         return decoratedSoldier.wardOff(strength);
     }
-
-    @Override
-    public String getDescription() {
-        return decoratedSoldier.getDescription();
-    }
 }
