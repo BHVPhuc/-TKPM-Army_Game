@@ -1,4 +1,6 @@
-abstract class EquipmentDecorator implements Soldier {
+import java.util.function.Function;
+
+public abstract class EquipmentDecorator implements Soldier {
     protected Soldier decoratedSoldier;
 
     public EquipmentDecorator(Soldier decoratedSoldier) {
@@ -13,5 +15,10 @@ abstract class EquipmentDecorator implements Soldier {
     @Override
     public boolean wardOff(int strength) {
         return decoratedSoldier.wardOff(strength);
+    }
+
+    @Override
+    public void addEquipment(Function<Soldier, EquipmentDecorator> decoratorFactory) {
+        decoratedSoldier.addEquipment(decoratorFactory);
     }
 }

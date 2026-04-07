@@ -1,3 +1,5 @@
+import java.util.function.Function;
+
 public class Horseman implements Soldier {
     private int health = 100;
     private int attack = 20;
@@ -17,5 +19,10 @@ public class Horseman implements Soldier {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void addEquipment(Function<Soldier, EquipmentDecorator> decoratorFactory) {
+        System.out.println("Cảnh báo: Không thể nạp trang bị trực tiếp cho lính không có Proxy/Group!");
     }
 }

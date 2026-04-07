@@ -1,32 +1,37 @@
 public class Main {
     public static void main(String[] args) {
-        Soldier infantryman = new Infantryman();
-        Soldier horseman = new Horseman();
+        // Tạo tiểu đội Bộ binh
+        SoldierGroup alphaSquad = new SoldierGroup("Tiểu đội Bộ binh Alpha");
+        alphaSquad.addMember(new ProxySoldier(new Infantryman()));
+        alphaSquad.addMember(new ProxySoldier(new Infantryman()));
 
-        System.out.println("--- Bộ binh (Proxy) ---");
-        ProxySoldier proxyInfantryman = new ProxySoldier(infantryman);
-        proxyInfantryman.addEquipment(Sword::new);
-        proxyInfantryman.addEquipment(Shield::new);
-        
-        System.out.println("\n--- Thử trang bị trùng lặp ---");
-        proxyInfantryman.addEquipment(Sword::new);
+        // Tạo tiểu đội Kỵ binh
+        SoldierGroup bravoSquad = new SoldierGroup("Tiểu đội Kỵ binh Bravo");
+        bravoSquad.addMember(new ProxySoldier(new Horseman()));
 
-        System.out.println("\n--- Kỵ binh (Proxy) ---");
-        ProxySoldier proxyHorseman = new ProxySoldier(horseman);
-        proxyHorseman.addEquipment(Shield::new);
+        // Tạo một quân đoàn (Composite chứa Composite và Leaf)
+        SoldierGroup army = new SoldierGroup("Đại đội Tiên phong");
+        army.addMember(alphaSquad);
+        army.addMember(bravoSquad);
         
-        System.out.println("\n--- Trận chiến bắt đầu ---");
-        
-        System.out.println("1. Bộ binh tấn công Kỵ binh:");
-        int damage1 = proxyInfantryman.hit();
-        System.out.println("\n=> Kỵ binh chịu đòn:");
-        proxyHorseman.wardOff(damage1);
-        System.out.println();
+        // Thêm một lính đánh lẻ (Leaf) vào đại đội
+        ProxySoldier general = new ProxySoldier(new Horseman());
+        army.addMember(general);
 
-        System.out.println("\n2. Kỵ binh phản công Bộ binh:");
-        int damage2 = proxyHorseman.hit();
-        System.out.println("\n=> Bộ binh chịu đòn:");
-        proxyInfantryman.wardOff(damage2);
-        System.out.println();
+        System.out.println("\n[SỰ KIỆN] PHÁT VŨ KHÍ CHO TOÀN BỘ ĐẠI ĐỘI (Giao Shield cho mọi lính)");
+        // Lệnh cấp thiết bị này sẽ đệ quy truyền từ Army -> Squads -> ProxySoldier
+        army.addEquipment(Shield::new);
+
+        System.out.println("\n[SỰ KIỆN] PHÁT KIẾM CHỈ CHO TIỂU ĐỘI ALPHA");
+        // Chỉ cấp cho một nhánh con
+        alphaSquad.addEquipment(Sword::new);
+
+        System.out.println("\n=================================");
+        System.out.println("\n[SỰ KIỆN] ĐẠI ĐỘI TỔNG TẤN CÔNG");
+        int totalDamage = army.hit();
+        System.out.println("TỔNG SÁT THƯƠNG ĐẠI ĐỘI GÂY RA: " + totalDamage + "\n");
+
+        System.out.println("\n[SỰ KIỆN] ĐẠI ĐỘI BỊ TẤN CÔNG (Sát thương = 60)");
+        army.wardOff(60);
     }
 }
