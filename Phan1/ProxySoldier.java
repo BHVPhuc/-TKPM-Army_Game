@@ -44,6 +44,11 @@ public class ProxySoldier implements Soldier {
         v.visit(this);
     }
 
+    @Override
+    public void addObserver(DeathObserver observer) {
+        _proxySoldier.addObserver(observer);
+    }
+
     // Getters cho Visitor truy cập cấu trúc bên trong
     public Soldier getRealSoldier() {
         return _proxySoldier;

@@ -1,8 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class Horseman implements Soldier {
     private int health = 100;
     private int attack = 20;
+    private List<DeathObserver> observers = new ArrayList<>();
 
     @Override
     public int hit() {
@@ -16,9 +19,19 @@ public class Horseman implements Soldier {
         health -= strength;
         if (health <= 0) {
             health = 0;
+            for (DeathObserver obs : observers) {
+                obs.onDeath(this);
+            }
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void addObserver(DeathObserver observer) {
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
     }
 
     @Override

@@ -28,6 +28,11 @@ public abstract class EquipmentDecorator implements Soldier {
         decoratedSoldier.accept(v);
     }
 
+    @Override
+    public void addObserver(DeathObserver observer) {
+        decoratedSoldier.addObserver(observer);
+    }
+
     public Soldier getDecoratedSoldier() {
         return decoratedSoldier;
     }

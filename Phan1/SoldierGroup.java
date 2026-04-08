@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 public class SoldierGroup implements Soldier {
     private List<Soldier> members = new ArrayList<>();
+    private List<DeathObserver> observers = new ArrayList<>();
     private String groupName;
 
     public SoldierGroup(String groupName) {
@@ -12,6 +13,10 @@ public class SoldierGroup implements Soldier {
 
     public void addMember(Soldier soldier) {
         members.add(soldier);
+        // Ngay lập tức gắn observers của Group vào soldier mới
+        for (DeathObserver obs : observers) {
+            soldier.addObserver(obs);
+        }
     }
 
     public void removeMember(Soldier soldier) {
@@ -52,6 +57,16 @@ public class SoldierGroup implements Soldier {
     @Override
     public void accept(Visitor v) {
         v.visit(this);
+    }
+
+    @Override
+    public void addObserver(DeathObserver observer) {
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+        for (Soldier soldier : members) {
+            soldier.addObserver(observer);
+        }
     }
 
     // Getters cho Visitor truy cập cấu trúc bên trong

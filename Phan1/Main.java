@@ -34,17 +34,21 @@ public class Main {
         army.accept(countVisitor);
         countVisitor.printReport();
 
+        // ===== OBSERVER PATTERN DEMO =====
+        System.out.println("\n=== THIẾT LẬP MẠNG LƯỚI THEO DÕI TỬ TRẬN ===");
+        DeathCountObserver counter = new DeathCountObserver();
+        DeathNotifierObserver notifier = new DeathNotifierObserver();
+        army.addObserver(counter);
+        army.addObserver(notifier);
+        System.out.println("Đã gắn DeathCountObserver và DeathNotifierObserver cho toàn Đại đội!");
+
         // ===== BATTLE =====
         System.out.println("\n=================================");
-        System.out.println("\n[SỰ KIỆN] ĐẠI ĐỘI TỔNG TẤN CÔNG");
-        int totalDamage = army.hit();
-        System.out.println("TỔNG SÁT THƯƠNG ĐẠI ĐỘI GÂY RA: " + totalDamage + "\n");
-
-        System.out.println("\n[SỰ KIỆN] ĐẠI ĐỘI BỊ TẤN CÔNG (Sát thương = " + totalDamage + ")");
-        CountVisitor temp = new CountVisitor();
-        army.accept(temp);
-        temp.printReport();
-        army.wardOff(totalDamage);
+        System.out.println("\n[SỰ KIỆN] PHỤC KÍCH: ĐẠI ĐỘI TRÚNG BOM HỦY DIỆT!");
+        
+        // Sát thương 5000, chia đều cho các thành viên đều sẽ gây sát thương tử vong
+        int bomDamage = 5000;
+        army.wardOff(bomDamage);
 
     }
 }
