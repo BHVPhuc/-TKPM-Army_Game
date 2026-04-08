@@ -38,4 +38,18 @@ public class ProxySoldier implements Soldier {
     public boolean wardOff(int strength) {
         return _proxySoldier.wardOff(strength);
     }
+
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
+    // Getters cho Visitor truy cập cấu trúc bên trong
+    public Soldier getRealSoldier() {
+        return _proxySoldier;
+    }
+
+    public Set<String> getEquippedItems() {
+        return equippedItems;
+    }
 }

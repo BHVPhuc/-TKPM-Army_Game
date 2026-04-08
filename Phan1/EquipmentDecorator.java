@@ -21,4 +21,14 @@ public abstract class EquipmentDecorator implements Soldier {
     public void addEquipment(Function<Soldier, EquipmentDecorator> decoratorFactory) {
         decoratedSoldier.addEquipment(decoratorFactory);
     }
+
+    @Override
+    public void accept(Visitor v) {
+        // Decorator là "lớp bọc", nên chuyển tiếp accept xuống soldier bên trong
+        decoratedSoldier.accept(v);
+    }
+
+    public Soldier getDecoratedSoldier() {
+        return decoratedSoldier;
+    }
 }

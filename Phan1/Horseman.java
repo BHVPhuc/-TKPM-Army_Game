@@ -25,4 +25,9 @@ public class Horseman implements Soldier {
     public void addEquipment(Function<Soldier, EquipmentDecorator> decoratorFactory) {
         System.out.println("Cảnh báo: Không thể nạp trang bị trực tiếp cho lính không có Proxy/Group!");
     }
+
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

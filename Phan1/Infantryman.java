@@ -23,7 +23,11 @@ public class Infantryman implements Soldier {
 
     @Override
     public void addEquipment(Function<Soldier, EquipmentDecorator> decoratorFactory) {
-        // Lá cơ bản không xử lý trực tiếp
         System.out.println("Cảnh báo: Không thể nạp trang bị trực tiếp cho lính không có Proxy/Group!");
+    }
+
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }

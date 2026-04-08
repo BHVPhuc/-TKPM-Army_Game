@@ -19,19 +19,33 @@ public class Main {
         army.addMember(general);
 
         System.out.println("\n[SỰ KIỆN] PHÁT VŨ KHÍ CHO TOÀN BỘ ĐẠI ĐỘI (Giao Shield cho mọi lính)");
-        // Lệnh cấp thiết bị này sẽ đệ quy truyền từ Army -> Squads -> ProxySoldier
         army.addEquipment(Shield::new);
 
         System.out.println("\n[SỰ KIỆN] PHÁT KIẾM CHỈ CHO TIỂU ĐỘI ALPHA");
-        // Chỉ cấp cho một nhánh con
         alphaSquad.addEquipment(Sword::new);
 
+        // ===== VISITOR PATTERN DEMO =====
+        System.out.println("\n=== VISITOR: Hiển thị cấu trúc đội quân ===");
+        DisplayVisitor displayVisitor = new DisplayVisitor();
+        army.accept(displayVisitor);
+
+        System.out.println("\n=== VISITOR: Thống kê quân số ===");
+        CountVisitor countVisitor = new CountVisitor();
+        army.accept(countVisitor);
+        countVisitor.printReport();
+
+        // ===== BATTLE =====
         System.out.println("\n=================================");
         System.out.println("\n[SỰ KIỆN] ĐẠI ĐỘI TỔNG TẤN CÔNG");
         int totalDamage = army.hit();
         System.out.println("TỔNG SÁT THƯƠNG ĐẠI ĐỘI GÂY RA: " + totalDamage + "\n");
 
-        System.out.println("\n[SỰ KIỆN] ĐẠI ĐỘI BỊ TẤN CÔNG (Sát thương = 60)");
-        army.wardOff(60);
+        System.out.println("\n[SỰ KIỆN] ĐẠI ĐỘI BỊ TẤN CÔNG (Sát thương = " + totalDamage + ")");
+        CountVisitor temp = new CountVisitor();
+        army.accept(temp);
+        temp.printReport();
+        army.wardOff(totalDamage);
+
     }
 }
+

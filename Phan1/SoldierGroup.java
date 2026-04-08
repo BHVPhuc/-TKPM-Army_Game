@@ -45,8 +45,21 @@ public class SoldierGroup implements Soldier {
     public void addEquipment(Function<Soldier, EquipmentDecorator> decoratorFactory) {
         System.out.println("=== Phân phối trang bị cho toàn bộ [" + groupName + "] ===");
         for (Soldier soldier : members) {
-            // Đệ quy cấp trang bị cho từng cá nhân (hoặc nhóm con)
             soldier.addEquipment(decoratorFactory);
         }
+    }
+
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
+    // Getters cho Visitor truy cập cấu trúc bên trong
+    public List<Soldier> getMembers() {
+        return members;
+    }
+
+    public String getGroupName() {
+        return groupName;
     }
 }
