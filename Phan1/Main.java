@@ -36,8 +36,8 @@ public class Main {
 
         // ===== OBSERVER PATTERN DEMO =====
         System.out.println("\n=== THIẾT LẬP MẠNG LƯỚI THEO DÕI TỬ TRẬN ===");
-        DeathCountObserver counter = new DeathCountObserver();
-        DeathNotifierObserver notifier = new DeathNotifierObserver();
+        DeathCountObserver counter = DeathCountObserver.getInstance();
+        DeathNotifierObserver notifier = DeathNotifierObserver.getInstance();
         army.addObserver(counter);
         army.addObserver(notifier);
         System.out.println("Đã gắn DeathCountObserver và DeathNotifierObserver cho toàn Đại đội!");
