@@ -89,3 +89,149 @@ classDiagram
     ProxySoldier o-- Soldier : "wraps / manages"
     EquipmentDecorator o-- Soldier : "decorates"
 ```
+
+## Phần 2:
+
+### 2.1. Composite Pattern
+
+Composite Pattern (Mẫu cấu trúc Hợp thể) được áp dụng để tổ chức binh lính lại thành các nhóm đội hình. Pattern cho phép chúng ta xử lý một nhóm các binh lính (`SoldierGroup`) và từng binh lính riêng lẻ (`Infantryman`, `Horseman`, hoặc Lính bọc trong qua lớp `ProxySoldier`) thông qua chung một interface cơ sở (`Soldier`).
+
+Bằng việc coi một Nhóm lính hệt như một đối tượng Lính thông thường, ta có thể xây dựng nên cấu trúc cây phân cấp (Tree structure) như ngoài đời thực. Ví dụ: Một Đại đội chứa các Trung đội, mỗi Trung đội lại chứa nhiều binh lính riêng lẻ. Khi ta ra lệnh `hit()`, toàn bộ cấu trúc cây sẽ đệ quy và lan truyền xuống từng chiếc lá (Leaf) để tính tổng sát thương. Điều này làm cho Client (hàm main) tương tác với mảng khối 1 vạn lính giống hệt cách tương tác với 1 lính đơn lẻ.
+
+```mermaid
+classDiagram
+    %% Component
+    class Soldier {
+        <<interface>>
+        +hit() int
+        +wardOff(strength: int) boolean
+        +addEquipment(decoratorFactory: Function) void
+        +accept(v: Visitor) void
+    }
+
+    %% Leaf
+    class Infantryman {
+        -health: int
+        +hit() int
+        +wardOff(strength: int) boolean
+        +addEquipment(decoratorFactory: Function) void
+        +accept(v: Visitor) void
+    }
+
+    class Horseman {
+        -health: int
+        +hit() int
+        +wardOff(strength: int) boolean
+        +addEquipment(decoratorFactory: Function) void
+        +accept(v: Visitor) void
+    }
+
+    %% Composite
+    class SoldierGroup {
+        -groupName: String
+        -members: List~Soldier~
+        +addMember(soldier: Soldier) void
+        +removeMember(soldier: Soldier) void
+        +hit() int
+        +wardOff(strength: int) boolean
+        +addEquipment(decoratorFactory: Function) void
+        +accept(v: Visitor) void
+    }
+
+    class ProxySoldier {
+        -_proxySoldier: Soldier
+        +ProxySoldier(realSoldier: Soldier)
+        +hit() int
+        +wardOff(strength: int) boolean
+        +addEquipment(decoratorFactory: Function) void
+        +accept(v: Visitor) void
+    }
+
+    %% Relationships
+    Soldier <|.. Infantryman : implements
+    Soldier <|.. Horseman : implements
+    Soldier <|.. SoldierGroup : implements
+    Soldier <|.. ProxySoldier : implements
+
+    SoldierGroup o-- Soldier : "contains"
+```
+
+---
+
+### 2.2. Visitor Pattern
+
+Visitor Pattern (Mẫu Khách Yếng Thăm) đặc biệt hiệu quả trong việc bóc tách các thuật toán thống kê/truy xuất dữ liệu khỏi cấu trúc liên kết mạng lưới chằng chịt của các đối tượng gốc.
+
+Trong dự án này, hệ thống đối tượng `Soldier`, `SoldierGroup`, `ProxySoldier`, `EquipmentDecorator` được tổ chức lồng nhau (do áp dụng chung Decorator, Proxy và Composite). Giả sử hệ thống phát sinh nhu cầu: **"Đếm số lượng bộ binh và kỵ binh thực sự có trong trận"** hay **"Hiển thị cây cấu trúc toàn bộ đội hình"**. Nếu cứ tiếp tục nhét 2 hàm này vào Interface `Soldier`, ta ép toàn bộ hàng chục class con phải code lại 2 thiết kế mới, vi phạm trầm trọng quy tắc Open/Closed Principle (OCP) và Single Responsibility Principle (SRP).
+
+Thay vì vậy, chúng ta thiết lập giao thức rẽ nhánh (Double-dispatch) thông qua lời gọi hàm `accept(Visitor v)` tại Interface nguyên thủ. Các khách rà soát là `CountVisitor` chuyên đi đếm và `DisplayVisitor` chuyên đi in kết quả, chúng luồn sâu xuống từng `SoldierGroup`, truy cập từng `member`, và khi đụng `ProxySoldier`, nó sẽ bóc tách mọi lớp bọc `EquipmentDecorator` ra để đếm chuẩn Lính dưới cùng. Client cực kỳ gọn gàng, hệ thống Core Data không hề bị nhiễm bẩn!
+
+```mermaid
+classDiagram
+    %% Visitor Interface
+    class Visitor {
+        <<interface>>
+        +visit(infantryman: Infantryman) void
+        +visit(horseman: Horseman) void
+        +visit(proxy: ProxySoldier) void
+        +visit(group: SoldierGroup) void
+    }
+
+    %% Concrete Visitors
+    class CountVisitor {
+        -infantryCount: int
+        -horseCount: int
+        +visit(infantryman: Infantryman) void
+        +visit(horseman: Horseman) void
+        +visit(proxy: ProxySoldier) void
+        +visit(group: SoldierGroup) void
+        +getInfantryCount() int
+        +getHorseCount() int
+        +printReport() void
+    }
+
+    class DisplayVisitor {
+        -indent: String
+        +visit(infantryman: Infantryman) void
+        +visit(horseman: Horseman) void
+        +visit(proxy: ProxySoldier) void
+        +visit(group: SoldierGroup) void
+    }
+
+    %% Element Interface
+    class Soldier {
+        <<interface>>
+        +accept(v: Visitor) void
+    }
+
+    %% Concrete Elements
+    class Infantryman {
+        +accept(v: Visitor) void
+    }
+
+    class Horseman {
+        +accept(v: Visitor) void
+    }
+
+    class SoldierGroup {
+        -members: List~Soldier~
+        +accept(v: Visitor) void
+    }
+
+    class ProxySoldier {
+        -realSoldier: Soldier
+        +accept(v: Visitor) void
+    }
+
+    %% Relationships
+    Visitor <|.. CountVisitor : implements
+    Visitor <|.. DisplayVisitor : implements
+
+    Soldier <|.. Infantryman : implements
+    Soldier <|.. Horseman : implements
+    Soldier <|.. SoldierGroup : implements
+    Soldier <|.. ProxySoldier : implements
+
+    Soldier ..> Visitor : "accepts"
+    Visitor ..> Soldier : "visits"
+```
