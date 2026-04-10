@@ -1,28 +1,30 @@
 public class Main {
     public static void main(String[] args) {
-        // Tạo tiểu đội Bộ binh
+        // Khởi tạo các Factory đại diện cho từng thời đại
+        ArmyFactory medievalFactory = new MedievalFactory();
+        ArmyFactory sciFiFactory = new SciFiFactory();
+
+        System.out.println("=== THUÊ QUÂN VÀ THIẾT LẬP ĐẠI ĐỘI ===");
+
+        // Tạo tiểu đội Bộ binh Trung Cổ
         SoldierGroup alphaSquad = new SoldierGroup("Tiểu đội Bộ binh Alpha");
-        alphaSquad.addMember(new ProxySoldier(new Infantryman()));
-        alphaSquad.addMember(new ProxySoldier(new Infantryman()));
+        alphaSquad.addMember(medievalFactory.createInfantryman());
+        alphaSquad.addMember(medievalFactory.createInfantryman());
 
-        // Tạo tiểu đội Kỵ binh
-        SoldierGroup bravoSquad = new SoldierGroup("Tiểu đội Kỵ binh Bravo");
-        bravoSquad.addMember(new ProxySoldier(new Horseman()));
+        // Tạo tiểu đội Kỵ binh Viễn Tưởng
+        SoldierGroup bravoSquad = new SoldierGroup("Tiểu đội Kỵ binh Sci-Fi Bravo");
+        bravoSquad.addMember(sciFiFactory.createHorseman());
 
-        // Tạo một quân đoàn (Composite chứa Composite và Leaf)
-        SoldierGroup army = new SoldierGroup("Đại đội Tiên phong");
+        // Tạo một quân đoàn tổng hợp
+        SoldierGroup army = new SoldierGroup("Đại đội Tiền phương");
         army.addMember(alphaSquad);
         army.addMember(bravoSquad);
         
-        // Thêm một lính đánh lẻ (Leaf) vào đại đội
-        ProxySoldier general = new ProxySoldier(new Horseman());
-        army.addMember(general);
+        System.out.println("\n[SỰ KIỆN] PHÁT VŨ KHÍ: Giao Kiếm Trung cổ cho toàn bộ Alpha Squad (Hợp lệ)");
+        alphaSquad.addEquipment(medievalFactory.getPrimaryWeapon());
 
-        System.out.println("\n[SỰ KIỆN] PHÁT VŨ KHÍ CHO TOÀN BỘ ĐẠI ĐỘI (Giao Shield cho mọi lính)");
-        army.addEquipment(Shield::new);
-
-        System.out.println("\n[SỰ KIỆN] PHÁT KIẾM CHỈ CHO TIỂU ĐỘI ALPHA");
-        alphaSquad.addEquipment(Sword::new);
+        System.out.println("\n[SỰ KIỆN] PHÁT VŨ KHÍ LỖI: Giao Súng Viễn tưởng cho Alpha Squad (Sẽ bị từ chối do khác thời đại!)");
+        alphaSquad.addEquipment(sciFiFactory.getPrimaryWeapon());
 
         // ===== VISITOR PATTERN DEMO =====
         System.out.println("\n=== VISITOR: Hiển thị cấu trúc đội quân ===");

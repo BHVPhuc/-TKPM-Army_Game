@@ -1,0 +1,3 @@
+public enum Era {
+    MEDIEVAL, WORLD_WAR, SCIENCE_FICTION;
+}

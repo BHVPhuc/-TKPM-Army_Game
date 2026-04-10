@@ -17,6 +17,12 @@ public class ProxySoldier implements Soldier {
     // Không cần truyền String thủ công → gọn hơn, ít lỗi hơn
     public void addEquipment(Function<Soldier, EquipmentDecorator> decoratorFactory) {
         EquipmentDecorator decorated = decoratorFactory.apply(this._proxySoldier);
+        
+        if (decorated.getEra() != this.getEra()) {
+            System.out.println("❌ TỪ CHỐI TRANG BỊ: [" + decorated.getClass().getSimpleName() + "] thuộc thời đại " + decorated.getEra() + " không tương thích với lính thời đại " + this.getEra() + "!");
+            return;
+        }
+        
         String equipmentName = decorated.getClass().getSimpleName();
 
         if (equippedItems.contains(equipmentName)) {
@@ -47,6 +53,11 @@ public class ProxySoldier implements Soldier {
     @Override
     public void addObserver(DeathObserver observer) {
         _proxySoldier.addObserver(observer);
+    }
+
+    @Override
+    public Era getEra() {
+        return _proxySoldier.getEra();
     }
 
     // Getters cho Visitor truy cập cấu trúc bên trong

@@ -6,4 +6,5 @@ public interface Soldier {
     void addEquipment(Function<Soldier, EquipmentDecorator> decoratorFactory);
     void accept(Visitor v);
     void addObserver(DeathObserver observer);
+    Era getEra();
 }

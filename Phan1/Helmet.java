@@ -1,23 +1,23 @@
-public class Shield extends EquipmentDecorator {
-    public Shield(Soldier soldier) {
+public class Helmet extends EquipmentDecorator {
+    public Helmet(Soldier soldier) {
         super(soldier);
     }
 
     @Override
     public Era getEra() {
-        return Era.MEDIEVAL;
+        return Era.WORLD_WAR;
     }
 
     @Override
     public int hit() {
         int d = super.hit();
-        System.out.println("   + [Shield] Bạo kích! (+10)");
+        System.out.println("   + [Helmet] Bạo kích! (+10)");
         return d + 10;
     }
 
     @Override
     public boolean wardOff(int strength) {
-        System.out.println("   > [Shield] Chặn bớt 5 sát thương!");
+        System.out.println("   > [Helmet] Chặn bớt 5 sát thương!");
         return super.wardOff(Math.max(0, strength - 5));
     }
 }

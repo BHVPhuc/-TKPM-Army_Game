@@ -1,22 +1,23 @@
 public class Sword extends EquipmentDecorator {
-    int durability = 5;
+    public Sword(Soldier soldier) {
+        super(soldier);
+    }
 
-    public Sword(Soldier decoratedSoldier) {
-        super(decoratedSoldier);
+    @Override
+    public Era getEra() {
+        return Era.MEDIEVAL;
     }
 
     @Override
     public int hit() {
-        System.out.format("Sword hit +%d ->", durability);
+        int d = super.hit();
+        System.out.println("   + [Sword] Bạo kích! (+10)");
+        return d + 10;
+    }
 
-        int postDamage = decoratedSoldier.hit() + 5;
-
-        durability = Math.max(durability - 1, 0);
-
-        if (durability == 0) {
-            System.out.print("Sword is broken! -> ");
-        }
-
-        return postDamage;
+    @Override
+    public boolean wardOff(int strength) {
+        System.out.println("   > [Sword] Chặn bớt 5 sát thương!");
+        return super.wardOff(Math.max(0, strength - 5));
     }
 }

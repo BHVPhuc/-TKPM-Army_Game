@@ -69,6 +69,11 @@ public class SoldierGroup implements Soldier {
         }
     }
 
+    @Override
+    public Era getEra() {
+        return members.isEmpty() ? Era.MEDIEVAL : members.get(0).getEra();
+    }
+
     // Getters cho Visitor truy cập cấu trúc bên trong
     public List<Soldier> getMembers() {
         return members;

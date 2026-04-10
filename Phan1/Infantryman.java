@@ -6,6 +6,16 @@ public class Infantryman implements Soldier {
     private int health = 100;
     private int attack = 15;
     private List<DeathObserver> observers = new ArrayList<>();
+    private Era era;
+
+    public Infantryman(Era era) {
+        this.era = era;
+    }
+
+    @Override
+    public Era getEra() {
+        return era;
+    }
 
     @Override
     public int hit() {

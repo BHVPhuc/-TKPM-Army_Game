@@ -33,6 +33,11 @@ public abstract class EquipmentDecorator implements Soldier {
         decoratedSoldier.addObserver(observer);
     }
 
+    @Override
+    public Era getEra() {
+        return decoratedSoldier.getEra(); 
+    }
+
     public Soldier getDecoratedSoldier() {
         return decoratedSoldier;
     }

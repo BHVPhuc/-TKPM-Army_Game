@@ -1,5 +1,5 @@
-public class Shield extends EquipmentDecorator {
-    public Shield(Soldier soldier) {
+public class Spear extends EquipmentDecorator {
+    public Spear(Soldier soldier) {
         super(soldier);
     }
 
@@ -11,13 +11,13 @@ public class Shield extends EquipmentDecorator {
     @Override
     public int hit() {
         int d = super.hit();
-        System.out.println("   + [Shield] Bạo kích! (+10)");
+        System.out.println("   + [Spear] Bạo kích! (+10)");
         return d + 10;
     }
 
     @Override
     public boolean wardOff(int strength) {
-        System.out.println("   > [Shield] Chặn bớt 5 sát thương!");
+        System.out.println("   > [Spear] Chặn bớt 5 sát thương!");
         return super.wardOff(Math.max(0, strength - 5));
     }
 }
